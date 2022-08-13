@@ -1957,7 +1957,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2815542157862942883}
   - component: {fileID: 2760329384573688205}
-  - component: {fileID: 2819250927823578945}
   - component: {fileID: 2819250927823578950}
   - component: {fileID: 2819250927823578944}
   - component: {fileID: 2819250927823578947}
@@ -2004,20 +2003,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!136 &2819250927823578945
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2819250927823578951}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.5
-  m_Height: 1.8455799
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.94239557, z: 0}
 --- !u!114 &2819250927823578950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2030,14 +2015,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85b60c8df0a552742a86a1c7ff7864d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _aimLayerMask:
+    serializedVersion: 2
+    m_Bits: 407
+  _distanceShoot: 100
+  _bulletTransform: {fileID: 5571902173268248405}
   _position:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  _bulletTransform: {fileID: 5571902173268248405}
-  _aimLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
+  _prepareShoot: 0.25
+  _timeToNextShoot: 0.45
   IsMoving: 0
 --- !u!195 &2819250927823578944
 NavMeshAgent:

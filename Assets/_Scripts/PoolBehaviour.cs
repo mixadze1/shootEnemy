@@ -4,25 +4,18 @@ using UnityEngine;
 
 public class PoolBehaviour<T> where T : MonoBehaviour
 {
-    public T prefab { get; private set; }
-    public bool autoExpand { get; set; }
-    public Transform container { get; }
-
     private List<T> _pool;
+
+    public T Prefab { get; private set; }
+
+    public Transform Container { get; }
 
     public PoolBehaviour(T prefab, int count)
     {
-        this.prefab = prefab;
-        this.container = null;
+        this.Prefab = prefab;
+        this.Container = null;
         this.CreatePool(count);
     }
-
-/*    public PoolBehaviour(T prefab, Transform container)
-    {
-        this.prefab = prefab;
-        this.container = container;
-        //this.CreatePool(count);
-    }*/
 
     private void CreatePool(int count)
     {
@@ -35,7 +28,7 @@ public class PoolBehaviour<T> where T : MonoBehaviour
 
     private T CreateObject(bool isActiveByDefault = false)
     {
-        var createdObject = Object.Instantiate(this.prefab, this.container);
+        var createdObject = Object.Instantiate(this.Prefab, this.Container);
         createdObject.gameObject.SetActive(isActiveByDefault);
         this._pool.Add(createdObject);
         return createdObject;
@@ -62,9 +55,6 @@ public class PoolBehaviour<T> where T : MonoBehaviour
         {
                 return element;
         }
-        if (this.autoExpand)
             return this.CreateObject(true);
-
-        throw new System.Exception($"Element null");
     }
 }

@@ -6,20 +6,22 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent (typeof(AnimationChange))]
 public class Player : MonoBehaviour
-{    
-    [SerializeField] private NavMeshAgent _agent;
-    [SerializeField] private Transform _bulletTransform;
+{
     [SerializeField] private LayerMask _aimLayerMask;
+    [SerializeField] private float _distanceShoot;
+    [SerializeField] private Transform _bulletTransform; 
     [SerializeField] private List<NavMeshPosition> _position;
+
+    [SerializeField, Range(0.2f,0.3f)] private float _prepareShoot = 0.25f;
+    [SerializeField,Range (0.45f,1f)] private float _timeToNextShoot = 0.45f;
+
+    private NavMeshAgent _agent;
     private Game _game;
-    private CameraTarget _camera;
     private Bullet _bulletSave;
     private Coroutine _coroutine;
     private AnimationChange _animationChange;
    
     private int _countClick;
-
-
 
     private bool _canShoot;
 
@@ -32,10 +34,9 @@ public class Player : MonoBehaviour
     public const string SHOOT = "Shoot";
     public const string TO_IDLE = "ToIdle";
 
-    public void Initialize(CameraTarget cameraTarget, Game game)
+    public void Initialize(Game game)
     {
         _game = game;
-        _camera = cameraTarget;
         _animationChange = GetComponent<AnimationChange>();
         _agent = GetComponent<NavMeshAgent>();
     }
@@ -43,13 +44,10 @@ public class Player : MonoBehaviour
     private void Update()
     {
         if (_game.IsPlay && _agent.velocity.sqrMagnitude == 0f && 
-            _position[_countClick].
-                        Enemies.Count <= 0)
+                _position[_countClick].Enemies.Count <= 0)
         {
             if (_position[_countClick].IsFinish)
                 return;
-
-            _camera.IsShotPos = false;
             _countClick++;
             StartMovingPos();
             
@@ -57,7 +55,7 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && _canShoot && !_isShoot && _position[_countClick].
             Enemies.Count > 0)
         {
-            Shoot();
+            Shoot(Camera.main.ScreenPointToRay(Input.mousePosition));
         }
             CheckDestination();
     }
@@ -78,46 +76,54 @@ public class Player : MonoBehaviour
             {
                 if (!_agent.hasPath || _agent.velocity.sqrMagnitude == 0f)
                 {
-                    _camera.IsShotPos = true;
                     _animationChange.Animator.SetBool(TO_IDLE, true);
-                    if (_position[_countClick].IsFinish)
-                    {
-                        _game.Win();
-                    }
-                    if (_position[_countClick].
-                        Enemies.Count > 0)
-                        _canShoot = true;
-                    else
-                    {
-                        _canShoot = false;
-                    }
+                    CheckFinish();
+                    CheckEnemies();
                 }
+            }
+            else
+            {
+                _canShoot = false;
             }
         }
     }
 
-    private void Shoot()
+    private void CheckEnemies()
+    {
+        if (_position[_countClick].
+                        Enemies.Count > 0)
+            _canShoot = true;
+    }
+
+    private void CheckFinish()
+    {
+        if (_position[_countClick].IsFinish)
+        {
+            _game.Win();
+        }
+    }
+
+    private void Shoot(Ray ray)
     {
         if (_coroutine != null)
             StopCoroutine(_coroutine);
-        _coroutine = StartCoroutine(PrepareShoot());
+        _coroutine = StartCoroutine(PrepareShoot(ray));
     }
 
-    private IEnumerator PrepareShoot()
+    private IEnumerator PrepareShoot(Ray ray)
     {
         _animationChange.ChangeAnimationState(SHOOT); 
         _isShoot = true;
         
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(_prepareShoot);
         InitializeBullet();
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, _aimLayerMask))
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, _distanceShoot, _aimLayerMask))
         {
             RotationPlayer(hitInfo);
             BulletTrajectory(hitInfo);
         }
-        yield return new WaitForSeconds(0.45f);
+        yield return new WaitForSeconds(_timeToNextShoot);
         _isShoot = false;
     }
 

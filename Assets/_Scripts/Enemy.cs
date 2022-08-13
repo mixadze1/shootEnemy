@@ -28,12 +28,10 @@ public class Enemy : MonoBehaviour
 
     public void Initialize(NavMeshPosition navMeshPosition)
     {
+        GetNeedComponent();
         _textHealth.text = Health.ToString();
         _maxHealth = Health;
         _navMeshPosition = navMeshPosition;
-        _canvas = GetComponentInChildren<Canvas>();
-        _animator = GetComponent<Animator>();
-        _rigidbody = GetComponentsInChildren<Rigidbody>();
         foreach (Rigidbody rb in _rigidbody)
         {
             rb.isKinematic = true;
@@ -41,28 +39,35 @@ public class Enemy : MonoBehaviour
         RotationCanvas();
     }
 
+    private void GetNeedComponent()
+    {
+        _canvas = GetComponentInChildren<Canvas>();
+        _animator = GetComponent<Animator>();
+        _rigidbody = GetComponentsInChildren<Rigidbody>();
+    }
+
     public void GetDamage(float damage)
     {
-        Health -= damage;
         _animator.Play(IS_DAMAGE);
+
+        Health -= damage;
         _imageHealth.fillAmount = Health / _maxHealth;
         _textHealth.text = Health.ToString();
+
         if (Health <= 0)
-        {
-            
-            _canvas.gameObject.SetActive(false);
+        { 
             Die();
         }
     }
 
     private void RotationCanvas()
     {
-        Debug.Log(180f - transform.rotation.eulerAngles.y);
         _canvas.transform.localRotation = Quaternion.Euler(0, (_offsetAngle - transform.rotation.eulerAngles.y + _offsetAngle), 0);
     }
 
     private void Die()
     {
+        _canvas.gameObject.SetActive(false);
         _animator.enabled = false;
         foreach (Rigidbody rb in _rigidbody)
         {

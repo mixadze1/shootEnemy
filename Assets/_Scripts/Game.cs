@@ -8,8 +8,6 @@ public class Game : MonoBehaviour
 { 
     [SerializeField] private Bullet _bulletPrefab;
     
-    [SerializeField] private CameraTarget _cameraTarget;
-    [SerializeField] public NavMeshSurface _navMesh;
     [SerializeField] private CinemachineVirtualCamera _virtualCamera;
     [SerializeField] private List<Level> _levels;
 
@@ -20,6 +18,8 @@ public class Game : MonoBehaviour
 
     private Player _player;
     private Level _level;
+
+    public NavMeshSurface NavMesh;
     public PoolBehaviour<Bullet> Bullets;
 
     public bool IsPlay;
@@ -28,25 +28,8 @@ public class Game : MonoBehaviour
     {
         CreatePoolBullet();
         StartNewGame();
-
     }
 
-    public void StartPlay()
-    {
-        IsPlay = true;
-        _startPlayButton.SetActive(false);
-    }
-
-    public void Win()
-    {
-        _winButton.SetActive(true);
-    }
-
-    private void InitializeCamera()
-    {
-        _virtualCamera.Follow = _player.transform;
-        _virtualCamera.LookAt = _player.transform;
-    }
 
     private void StartNewGame()
     {
@@ -54,8 +37,22 @@ public class Game : MonoBehaviour
         CreateLevel(_levels[_countLevel]);
         InitializePlayer();
         InitializeEnemy();
-        _navMesh.BuildNavMesh();
+        NavMesh.BuildNavMesh();
         InitializeCamera();
+    }
+
+    public void RestartGame()
+    {
+        IsPlay = false;
+        _winButton.SetActive(false);
+        Destroy(_level.gameObject);
+        StartNewGame();
+    }
+
+    private void InitializeCamera()
+    {
+        _virtualCamera.Follow = _player.transform;
+        _virtualCamera.LookAt = _player.transform;
     }
 
     private void CreateLevel(Level level)
@@ -66,8 +63,7 @@ public class Game : MonoBehaviour
     private void InitializePlayer()
     {
         Player player = _player = _level.GetComponentInChildren<Player>();
-        player.Initialize(_cameraTarget, this);
-        _cameraTarget.Initialize(player);
+        player.Initialize(this);
     }
 
     private void InitializeEnemy()
@@ -79,18 +75,21 @@ public class Game : MonoBehaviour
         }
     }
 
-   
-
-    public void RestartGame()
-    {
-        IsPlay = false;
-        _winButton.SetActive(false);
-        Destroy(_level.gameObject);
-        StartNewGame();
-    }
-
     private void CreatePoolBullet()
     {
         Bullets = new PoolBehaviour<Bullet>(_bulletPrefab, 10);
     }
+
+    #region UI
+    public void StartPlay()
+    {
+        IsPlay = true;
+        _startPlayButton.SetActive(false);
+    }
+
+    public void Win()
+    {
+        _winButton.SetActive(true);
+    }
+    #endregion
 }
