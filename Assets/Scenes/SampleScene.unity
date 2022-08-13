@@ -731,6 +731,7 @@ MonoBehaviour:
   - {fileID: 9136715817511143637, guid: ccca7f49b730bd34583d397eceeb51ca, type: 3}
   _startPlayButton: {fileID: 1403403433}
   _winButton: {fileID: 1968026453}
+  _amountCreateBulletInPool: 10
   _countLevel: 0
   NavMesh: {fileID: 1817765602}
   IsPlay: 0
@@ -1216,17 +1217,17 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
-  m_UseGeometry: 1
+    m_Bits: 247
+  m_UseGeometry: 0
   m_DefaultArea: 0
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.06666667
+  m_VoxelSize: 0.16666667
   m_BuildHeightMesh: 0
-  m_NavMeshData: {fileID: 23800000, guid: a3e4329236b6c2b40b3f72ff4ebf212d, type: 2}
+  m_NavMeshData: {fileID: 0}
 --- !u!4 &1817765603
 Transform:
   m_ObjectHideFlags: 0

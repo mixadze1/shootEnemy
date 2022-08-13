@@ -90,17 +90,14 @@ public class Player : MonoBehaviour
 
     private void CheckEnemies()
     {
-        if (_position[_countClick].
-                        Enemies.Count > 0)
+        if (_position[_countClick]. Enemies.Count > 0)
             _canShoot = true;
     }
 
     private void CheckFinish()
     {
         if (_position[_countClick].IsFinish)
-        {
             _game.Win();
-        }
     }
 
     private void Shoot(Ray ray)
@@ -120,7 +117,7 @@ public class Player : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hitInfo, _distanceShoot, _aimLayerMask))
         {
-            RotationPlayer(hitInfo);
+            RotationPlayerToShoot(hitInfo);
             BulletTrajectory(hitInfo);
         }
         yield return new WaitForSeconds(_timeToNextShoot);
@@ -145,7 +142,7 @@ public class Player : MonoBehaviour
         _bulletSave.Direction = direction;
     }
 
-    private void RotationPlayer(RaycastHit hitInfo)
+    private void RotationPlayerToShoot(RaycastHit hitInfo)
     {
         var destination = hitInfo.point;
 

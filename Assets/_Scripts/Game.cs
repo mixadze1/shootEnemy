@@ -14,6 +14,7 @@ public class Game : MonoBehaviour
     [SerializeField] private GameObject _startPlayButton;
     [SerializeField] private GameObject _winButton;
 
+    [SerializeField] private int _amountCreateBulletInPool;
     [SerializeField] private int _countLevel;
 
     private Player _player;
@@ -77,7 +78,7 @@ public class Game : MonoBehaviour
 
     private void CreatePoolBullet()
     {
-        Bullets = new PoolBehaviour<Bullet>(_bulletPrefab, 10);
+        Bullets = new PoolBehaviour<Bullet>(_bulletPrefab, _amountCreateBulletInPool);
     }
 
     #region UI

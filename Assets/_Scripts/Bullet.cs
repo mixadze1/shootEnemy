@@ -8,7 +8,7 @@ public class Bullet : MonoBehaviour
 
     private Vector3 _positionBullet;
 
-    [HideInInspector] public Vector3 Direction;
+    public Vector3 Direction;
 
     public void Initialize()
     {
