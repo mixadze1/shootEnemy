@@ -1454,7 +1454,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c11014548530e14ca761e7bd45ebc98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rigidbody: []
+  _imageHealth: {fileID: 4882359765117484496}
+  _textHealth: {fileID: 5833706156103132960}
   Health: 10
   IsDie: 0
 --- !u!1 &5401197427879455853
