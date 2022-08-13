@@ -137,8 +137,7 @@ public class Player : MonoBehaviour
     private void BulletTrajectory(RaycastHit hitInfo)
     {
         var destination = hitInfo.point;
-        var direction = destination - _bulletSave.transform.position;
-        direction.Normalize();
+        var direction = (destination - _bulletSave.transform.position).normalized;
         _bulletSave.Direction = direction;
     }
 
