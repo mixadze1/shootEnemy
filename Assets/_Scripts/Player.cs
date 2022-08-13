@@ -43,21 +43,36 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (_game.IsPlay && _agent.velocity.sqrMagnitude == 0f && 
-                _position[_countClick].Enemies.Count <= 0)
+        if (IsNextPosition())
         {
             if (_position[_countClick].IsFinish)
                 return;
+
             _countClick++;
             StartMovingPos();
-            
         }
-        if (Input.GetMouseButtonDown(0) && _canShoot && !_isShoot && _position[_countClick].
-            Enemies.Count > 0)
+
+        if (IsCanShoot())
         {
             Shoot(Camera.main.ScreenPointToRay(Input.mousePosition));
         }
-            CheckDestination();
+        CheckDestination();
+    }
+
+    private bool IsCanShoot()
+    {
+        if (Input.GetMouseButtonDown(0) && _canShoot && !_isShoot && _position[_countClick].
+            Enemies.Count > 0)
+            return true;
+        return false;
+    }
+
+    private bool IsNextPosition()
+    {
+        if (_game.IsPlay && _agent.velocity.sqrMagnitude == 0f &&
+                _position[_countClick].Enemies.Count <= 0)
+            return true;
+        return false;
     }
 
     private void StartMovingPos()
@@ -117,8 +132,8 @@ public class Player : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hitInfo, _distanceShoot, _aimLayerMask))
         {
-            RotationPlayerToShoot(hitInfo);
             BulletTrajectory(hitInfo);
+            RotationPlayerToShoot(hitInfo);
         }
         yield return new WaitForSeconds(_timeToNextShoot);
         _isShoot = false;

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -19,7 +18,7 @@ public class Game : MonoBehaviour
 
     private Player _player;
     private Level _level;
-
+    private List<PoolBehaviour<Bullet>> _bullet;
     public NavMeshSurface NavMesh;
     public PoolBehaviour<Bullet> Bullets;
 
@@ -30,7 +29,6 @@ public class Game : MonoBehaviour
         CreatePoolBullet();
         StartNewGame();
     }
-
 
     private void StartNewGame()
     {
@@ -45,6 +43,7 @@ public class Game : MonoBehaviour
     public void RestartGame()
     {
         IsPlay = false;
+        Bullets.DisablePoolBullet();
         _winButton.SetActive(false);
         Destroy(_level.gameObject);
         StartNewGame();

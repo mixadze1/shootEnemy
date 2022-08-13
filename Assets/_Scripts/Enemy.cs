@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,7 +13,6 @@ public class Enemy : MonoBehaviour
     private NavMeshPosition _navMeshPosition;
     private Animator _animator;
     private Canvas _canvas;
-
 
     private float _offsetAngle = 180;
     private float _maxHealth;
@@ -55,7 +52,7 @@ public class Enemy : MonoBehaviour
         _textHealth.text = Health.ToString();
 
         if (Health <= 0)
-        { 
+        {
             Die();
         }
     }
@@ -76,6 +73,5 @@ public class Enemy : MonoBehaviour
         IsDie = true;
         _navMeshPosition.Enemies.Remove(this);
     }
-
 }
 

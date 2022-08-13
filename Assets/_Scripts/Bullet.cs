@@ -27,6 +27,7 @@ public class Bullet : MonoBehaviour
         {
             TakeDamage((collision.gameObject.GetComponentInParent<Enemy>()));
         }
+        Direction = Vector3.zero;
         gameObject.SetActive(false);
     }
 
@@ -39,6 +40,7 @@ public class Bullet : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, _positionBullet) > _maxDistance)
         {
+            Direction = Vector3.zero;
             gameObject.SetActive(false);
         }
     }

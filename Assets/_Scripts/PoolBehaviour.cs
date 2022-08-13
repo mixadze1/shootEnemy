@@ -12,26 +12,35 @@ public class PoolBehaviour<T> where T : MonoBehaviour
 
     public PoolBehaviour(T prefab, int count)
     {
-        this.Prefab = prefab;
-        this.Container = null;
-        this.CreatePool(count);
+        Prefab = prefab;
+        Container = null;
+        CreatePool(count);
     }
 
     private void CreatePool(int count)
     {
-        this._pool = new List<T>();
+       _pool = new List<T>();
         for (int i = 0; i < count; i++)
         {
-            this.CreateObject();
+            CreateObject();
         }
     }
 
     private T CreateObject(bool isActiveByDefault = false)
     {
-        var createdObject = Object.Instantiate(this.Prefab, this.Container);
+        var createdObject = Object.Instantiate(Prefab, Container);
         createdObject.gameObject.SetActive(isActiveByDefault);
-        this._pool.Add(createdObject);
+        _pool.Add(createdObject);
         return createdObject;
+    }
+
+    public void DisablePoolBullet()
+    {
+        foreach (var pool in _pool)
+        {
+            pool.GetComponent<Bullet>().Direction = Vector3.zero;
+            pool.gameObject.SetActive(false);
+        }
     }
 
     public bool HasFreeElement(out T element)
@@ -51,10 +60,10 @@ public class PoolBehaviour<T> where T : MonoBehaviour
 
     public T GetFreeElement()
     {
-        if (this.HasFreeElement(out var element))
+        if (HasFreeElement(out var element))
         {
-                return element;
+            return element;
         }
-            return this.CreateObject(true);
+        return CreateObject(true);
     }
 }
