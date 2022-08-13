@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent (typeof(AnimationChange))]
 public class Player : MonoBehaviour
-{
-    [SerializeField] private float _speed;
-    [SerializeField] private List<Transform> _position;
-    [SerializeField] private CameraTarget _camera;
-    [SerializeField] private Bullet _bulletPrefab;
+{    
+    [SerializeField] private NavMeshAgent _agent;
     [SerializeField] private Transform _bulletTransform;
     [SerializeField] private LayerMask _aimLayerMask;
+    [SerializeField] private List<NavMeshPosition> _position;
+    private Game _game;
+    private CameraTarget _camera;
     private Bullet _bulletSave;
     private Coroutine _coroutineRotate;
     private Coroutine _coroutineAnimShoot;
     private AnimationChange _animationChange;
-    private NavMeshAgent _agent;
+   
     private int _countClick;
 
     public const string WALKING = "Walking";
@@ -29,8 +31,10 @@ public class Player : MonoBehaviour
 
     public bool IsMoving;
 
-    private void Start()
+    public void Initialize(CameraTarget cameraTarget, Game game)
     {
+        _game = game;
+        _camera = cameraTarget;
         _animationChange = GetComponent<AnimationChange>();
         _agent = GetComponent<NavMeshAgent>();
     }
@@ -41,7 +45,7 @@ public class Player : MonoBehaviour
             _position[_countClick].gameObject.GetComponent<NavMeshPosition>().
                         Enemies.Count <= 0)
         {
-            if (_position[_countClick].gameObject.GetComponent<NavMeshPosition>().IsFinish)
+            if (_position[_countClick].IsFinish)
                 return;
 
             _camera.IsShotPos = false;
@@ -61,7 +65,7 @@ public class Player : MonoBehaviour
     {  
         _animationChange.Animator.SetBool(TO_IDLE, false);
         _animationChange.ChangeAnimationState(WALKING);
-        _agent.SetDestination(_position[_countClick].position); 
+        _agent.SetDestination(_position[_countClick].transform.position); 
 
     }
 
@@ -84,12 +88,12 @@ public class Player : MonoBehaviour
                     }
                 }
             }
-           
         }
     }
 
     private void Shoot()
-    {if (_coroutineAnimShoot != null)
+    {
+        if (_coroutineAnimShoot != null)
             StopCoroutine(_coroutineAnimShoot);
         _coroutineAnimShoot = StartCoroutine(PrepareShoot());
     }
@@ -100,8 +104,9 @@ public class Player : MonoBehaviour
         _isShoot = true;
         
         yield return new WaitForSeconds(0.25f);
-        Bullet bullet = _bulletSave = Instantiate(_bulletPrefab);
+        Bullet bullet = _bulletSave = _game.Bullets.GetFreeElement();
         bullet.transform.position = _bulletTransform.position;
+        bullet.Initialize();
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, _aimLayerMask))
         {
@@ -140,8 +145,7 @@ public class Player : MonoBehaviour
         while( _position[_countClick].gameObject.GetComponent<NavMeshPosition>().
                         Enemies.Count > 0)
         {
-            Debug.Log("zdec");
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSeconds(0.02f);
 
             transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.5f);
         }

@@ -2030,14 +2030,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85b60c8df0a552742a86a1c7ff7864d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 0
   _position:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  _camera: {fileID: 0}
-  _bulletPrefab: {fileID: 9134328185518111335, guid: e9f435771b4089f4d9bcfaecde13eef8, type: 3}
   _bulletTransform: {fileID: 5571902173268248405}
+  _aimLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
   IsMoving: 0
 --- !u!195 &2819250927823578944
 NavMeshAgent:
@@ -2053,7 +2053,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0.5
+  m_StoppingDistance: 0.7
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

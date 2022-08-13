@@ -13,6 +13,11 @@ public class CameraTarget : MonoBehaviour
 
     public bool IsShotPos;
 
+    public void Initialize(Player player)
+    {
+        _player = player;
+    }
+
     private void LateUpdate()
     {
         if (IsShotPos)

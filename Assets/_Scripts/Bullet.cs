@@ -3,13 +3,22 @@
 public class Bullet : MonoBehaviour
 {
     [SerializeField] private float _speed;
-    [SerializeField] private float _damage = 15;
+    [SerializeField] private float _damage = 10;
+    [SerializeField] private float _maxDistance;
 
-    public Vector3 Direction;
+    private Vector3 _positionBullet;
+
+    [HideInInspector] public Vector3 Direction;
+
+    public void Initialize()
+    {
+        _positionBullet = transform.position;
+    }
 
     private void Update()
     {
         transform.Translate(_speed * Direction * Time.deltaTime);
+        MaxDistance();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -18,11 +27,19 @@ public class Bullet : MonoBehaviour
         {
             TakeDamage((collision.gameObject.GetComponentInParent<Enemy>()));
         }
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
     private void TakeDamage(Enemy enemy)
     {
         enemy.GetDamage(_damage);
+    }
+    
+    private void MaxDistance()
+    {
+        if (Vector3.Distance(transform.position, _positionBullet) > _maxDistance)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

@@ -259,6 +259,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 15
   _damage: 15
+  _maxDistance: 50
   Direction: {x: 0, y: 0, z: 0}
 --- !u!54 &8726241809928497861
 Rigidbody:

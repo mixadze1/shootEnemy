@@ -7,7 +7,7 @@ public class NavMeshPosition : MonoBehaviour
     public List<Enemy> Enemies = new List<Enemy>();
     public bool IsFinish;
 
-    private void Start()
+    public void Initialize()
     {
        Enemy[] enemies = GetComponentsInChildren<Enemy>();
         foreach (Enemy enemy in enemies)

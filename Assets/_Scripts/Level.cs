@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class Level : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private Game _game;
 
-    // Update is called once per frame
-    void Update()
+   /* public void Initialize(Game game)
     {
-        
+        _game = game;
     }
+    private void OnEnable()
+    {
+        _game._navMesh.BuildNavMesh();
+    }*/
 }
