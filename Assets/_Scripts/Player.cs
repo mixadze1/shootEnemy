@@ -14,22 +14,23 @@ public class Player : MonoBehaviour
     private Game _game;
     private CameraTarget _camera;
     private Bullet _bulletSave;
-    private Coroutine _coroutineRotate;
-    private Coroutine _coroutineAnimShoot;
+    private Coroutine _coroutine;
     private AnimationChange _animationChange;
    
     private int _countClick;
 
-    public const string WALKING = "Walking";
-    public const string SHOOT_IDLE = "ShootIdle";
-    public const string SHOOT = "Shoot";
-    public const string TO_IDLE = "ToIdle";
+
 
     private bool _canShoot;
 
     private bool _isShoot;
 
     public bool IsMoving;
+
+    public const string WALKING = "Walking";
+    public const string SHOOT_IDLE = "ShootIdle";
+    public const string SHOOT = "Shoot";
+    public const string TO_IDLE = "ToIdle";
 
     public void Initialize(CameraTarget cameraTarget, Game game)
     {
@@ -97,9 +98,9 @@ public class Player : MonoBehaviour
 
     private void Shoot()
     {
-        if (_coroutineAnimShoot != null)
-            StopCoroutine(_coroutineAnimShoot);
-        _coroutineAnimShoot = StartCoroutine(PrepareShoot());
+        if (_coroutine != null)
+            StopCoroutine(_coroutine);
+        _coroutine = StartCoroutine(PrepareShoot());
     }
 
     private IEnumerator PrepareShoot()
@@ -108,21 +109,29 @@ public class Player : MonoBehaviour
         _isShoot = true;
         
         yield return new WaitForSeconds(0.25f);
-        Bullet bullet = _bulletSave = _game.Bullets.GetFreeElement();
-        bullet.transform.position = _bulletTransform.position;
-        bullet.Initialize();
-        bullet.GetComponentInChildren<TrailRenderer>().enabled = true;
+        InitializeBullet();
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, _aimLayerMask))
         {
             RotationPlayer(hitInfo);
-            BulletFly(hitInfo);
+            BulletTrajectory(hitInfo);
         }
         yield return new WaitForSeconds(0.45f);
         _isShoot = false;
     }
 
-    private void BulletFly(RaycastHit hitInfo)
+    private void InitializeBullet()
+    {
+        Bullet bullet = _bulletSave = _game.Bullets.GetFreeElement();
+
+        bullet.transform.position = _bulletTransform.position;
+        bullet.GetComponentInChildren<TrailRenderer>().Clear();
+        bullet.gameObject.SetActive(true);
+        bullet.Initialize();
+    }
+
+    private void BulletTrajectory(RaycastHit hitInfo)
     {
         var destination = hitInfo.point;
         var direction = destination - _bulletSave.transform.position;
