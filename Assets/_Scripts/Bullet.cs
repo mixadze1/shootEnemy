@@ -28,6 +28,7 @@ public class Bullet : MonoBehaviour
             TakeDamage((collision.gameObject.GetComponentInParent<Enemy>()));
         }
         gameObject.SetActive(false);
+        gameObject.GetComponentInChildren<TrailRenderer>().enabled = false;
     }
 
     private void TakeDamage(Enemy enemy)
@@ -40,6 +41,7 @@ public class Bullet : MonoBehaviour
         if (Vector3.Distance(transform.position, _positionBullet) > _maxDistance)
         {
             gameObject.SetActive(false);
+            gameObject.GetComponentInChildren<TrailRenderer>().enabled = false;
         }
     }
 }

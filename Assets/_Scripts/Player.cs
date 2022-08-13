@@ -41,8 +41,8 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && _agent.velocity.sqrMagnitude == 0f && 
-            _position[_countClick].gameObject.GetComponent<NavMeshPosition>().
+        if (_game.IsPlay && _agent.velocity.sqrMagnitude == 0f && 
+            _position[_countClick].
                         Enemies.Count <= 0)
         {
             if (_position[_countClick].IsFinish)
@@ -53,8 +53,8 @@ public class Player : MonoBehaviour
             StartMovingPos();
             
         }
-        if (Input.GetMouseButtonDown(0) && _canShoot && !_isShoot && _position[_countClick].gameObject.GetComponent<NavMeshPosition>().
-                        Enemies.Count > 0)
+        if (Input.GetMouseButtonDown(0) && _canShoot && !_isShoot && _position[_countClick].
+            Enemies.Count > 0)
         {
             Shoot();
         }
@@ -79,7 +79,11 @@ public class Player : MonoBehaviour
                 {
                     _camera.IsShotPos = true;
                     _animationChange.Animator.SetBool(TO_IDLE, true);
-                    if (_position[_countClick].gameObject.GetComponent<NavMeshPosition>().
+                    if (_position[_countClick].IsFinish)
+                    {
+                        _game.Win();
+                    }
+                    if (_position[_countClick].
                         Enemies.Count > 0)
                         _canShoot = true;
                     else
@@ -107,6 +111,7 @@ public class Player : MonoBehaviour
         Bullet bullet = _bulletSave = _game.Bullets.GetFreeElement();
         bullet.transform.position = _bulletTransform.position;
         bullet.Initialize();
+        bullet.GetComponentInChildren<TrailRenderer>().enabled = true;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hitInfo, Mathf.Infinity, _aimLayerMask))
         {
@@ -120,7 +125,8 @@ public class Player : MonoBehaviour
     private void BulletFly(RaycastHit hitInfo)
     {
         var destination = hitInfo.point;
-        var direction = (destination - _bulletTransform.position).normalized;
+        var direction = destination - _bulletSave.transform.position;
+        direction.Normalize();
         _bulletSave.Direction = direction;
     }
 
@@ -135,20 +141,6 @@ public class Player : MonoBehaviour
         Quaternion rotation =  Quaternion.LookRotation(direction, transform.position);
         rotation.x = 0;
         rotation.z = 0;
-        if (_coroutineRotate != null)
-            StopCoroutine(_coroutineRotate);
-      _coroutineRotate =   StartCoroutine(RotationPlayer( rotation));
-    }
-
-    private IEnumerator RotationPlayer(Quaternion rotation)
-    {
-        while( _position[_countClick].gameObject.GetComponent<NavMeshPosition>().
-                        Enemies.Count > 0)
-        {
-            yield return new WaitForSeconds(0.02f);
-
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.5f);
-        }
-       
+        transform.rotation = rotation;
     }
 }

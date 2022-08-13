@@ -9,8 +9,6 @@ public class AnimationChange : MonoBehaviour
 
     public void ChangeAnimationState(string newState)
     {
-       /* if (CurrentState == newState)
-            return;*/
         CurrentState = newState;
         Animator.Play(newState);
     }

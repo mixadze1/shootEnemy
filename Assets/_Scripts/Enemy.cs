@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private Rigidbody[] _rigidbody;
+    private Rigidbody[] _rigidbody;
 
     private NavMeshPosition _navMeshPosition;
     private Animator _animator;
@@ -42,7 +43,6 @@ public class Enemy : MonoBehaviour
         }
         IsDie = true;
         _navMeshPosition.Enemies.Remove(this);
-       Debug.Log(_navMeshPosition.Enemies.Count) ;
     }
 
 }
