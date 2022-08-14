@@ -113,7 +113,7 @@ public class Player : MonoBehaviour
     private void CheckFinish()
     {
         if (_position[_countClick].IsFinish)
-            _game.Win();
+            _game.RestartGame();
     }
 
     private void Shoot(Ray ray)
