@@ -303,7 +303,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 3, z: -7}
+  m_FollowOffset: {x: 0, y: 3, z: -7.5}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -576,12 +576,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 945aaa48b32303e46b8b2ab2baaaf68e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 0}
-  _distanceForNotShoot: {x: 0.2, y: 2, z: -3.5}
-  _timeToPosNotShoot: 0.01
-  _distanceForShoot: {x: 0.2, y: 1.8, z: -1.5}
-  _timeToPosShoot: 0.05
-  IsShotPos: 0
 --- !u!114 &963194231
 MonoBehaviour:
   m_ObjectHideFlags: 0

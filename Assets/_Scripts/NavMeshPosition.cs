@@ -4,6 +4,7 @@ using UnityEngine;
 public class NavMeshPosition : MonoBehaviour
 {
     public List<Enemy> Enemies = new List<Enemy>();
+
     public bool IsFinish;
 
     public void Initialize()

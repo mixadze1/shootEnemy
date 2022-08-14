@@ -11,11 +11,11 @@ public class Bullet : MonoBehaviour
     public Vector3 Direction;
 
     public void Initialize()
-    {
+    {   
         _positionBullet = transform.position;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         transform.Translate(_speed * Direction * Time.deltaTime);
         CheckDistance();

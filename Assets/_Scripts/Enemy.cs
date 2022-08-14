@@ -7,17 +7,18 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private Image _imageHealth;
     [SerializeField] private TextMeshProUGUI _textHealth;
-    
-    private Rigidbody[] _rigidbody;
+    [SerializeField] private Canvas _canvasForHealth;
+
+    private Rigidbody[] _rigidbodyRagdoll;
 
     private NavMeshPosition _navMeshPosition;
     private Animator _animator;
-    private Canvas _canvas;
 
-    private float _offsetAngle = 180;
+
+    private float _offsetAngleForCanvas = 180;
     private float _maxHealth;
 
-    public float Health = 10;
+    public float Health;
 
     public bool IsDie;
 
@@ -29,7 +30,7 @@ public class Enemy : MonoBehaviour
         _textHealth.text = Health.ToString();
         _maxHealth = Health;
         _navMeshPosition = navMeshPosition;
-        foreach (Rigidbody rb in _rigidbody)
+        foreach (Rigidbody rb in _rigidbodyRagdoll)
         {
             rb.isKinematic = true;
         }
@@ -38,9 +39,8 @@ public class Enemy : MonoBehaviour
 
     private void GetNeedComponent()
     {
-        _canvas = GetComponentInChildren<Canvas>();
         _animator = GetComponent<Animator>();
-        _rigidbody = GetComponentsInChildren<Rigidbody>();
+        _rigidbodyRagdoll = GetComponentsInChildren<Rigidbody>();
     }
 
     public void GetDamage(float damage)
@@ -59,14 +59,14 @@ public class Enemy : MonoBehaviour
 
     private void RotationCanvas()
     {
-        _canvas.transform.localRotation = Quaternion.Euler(0, (_offsetAngle - transform.rotation.eulerAngles.y + _offsetAngle), 0);
+        _canvasForHealth.transform.localRotation = Quaternion.Euler(0, (_offsetAngleForCanvas - transform.rotation.eulerAngles.y + _offsetAngleForCanvas), 0);
     }
 
     private void Die()
     {
-        _canvas.gameObject.SetActive(false);
+        _canvasForHealth.gameObject.SetActive(false);
         _animator.enabled = false;
-        foreach (Rigidbody rb in _rigidbody)
+        foreach (Rigidbody rb in _rigidbodyRagdoll)
         {
             rb.isKinematic = false;
         }

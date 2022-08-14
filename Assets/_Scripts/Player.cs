@@ -8,9 +8,12 @@ using UnityEngine.AI;
 public class Player : MonoBehaviour
 {
     [SerializeField] private LayerMask _aimLayerMask;
-    [SerializeField] private float _distanceShoot;
+
     [SerializeField] private Transform _bulletTransform; 
+
     [SerializeField] private List<NavMeshPosition> _position;
+
+    [SerializeField] private float _distanceShoot;
 
     [SerializeField, Range(0.2f,0.3f)] private float _prepareShoot = 0.25f;
     [SerializeField,Range (0.45f,1f)] private float _timeToNextShoot = 0.45f;
@@ -24,7 +27,6 @@ public class Player : MonoBehaviour
     private int _countClick;
 
     private bool _canShoot;
-
     private bool _isShoot;
 
     public bool IsMoving;
@@ -80,7 +82,6 @@ public class Player : MonoBehaviour
         _animationChange.Animator.SetBool(TO_IDLE, false);
         _animationChange.ChangeAnimationState(WALKING);
         _agent.SetDestination(_position[_countClick].transform.position); 
-
     }
 
     private void CheckDestination()
@@ -143,10 +144,25 @@ public class Player : MonoBehaviour
     {
         Bullet bullet = _bulletSave = _game.Bullets.GetFreeElement();
 
-        bullet.transform.position = _bulletTransform.position;
+        ResetBullet(bullet);
+        ResetBulletRigidbody(bullet);
         bullet.GetComponentInChildren<TrailRenderer>().Clear();
         bullet.gameObject.SetActive(true);
         bullet.Initialize();
+    }
+
+    private void ResetBullet(Bullet bullet)
+    {
+        bullet.transform.position = _bulletTransform.position;
+        bullet.transform.rotation = new Quaternion(0, 0, 0, 0);
+        bullet.Direction = Vector3.zero; 
+    }
+
+    private void ResetBulletRigidbody(Bullet bullet)
+    {
+        Rigidbody rigidbody = bullet.GetComponent<Rigidbody>();
+        rigidbody.velocity = Vector3.zero;
+        rigidbody.angularVelocity = Vector3.zero;
     }
 
     private void BulletTrajectory(RaycastHit hitInfo)

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,11 +33,10 @@ public class PoolBehaviour<T> where T : MonoBehaviour
         return createdObject;
     }
 
-    public void DisablePoolBullet()
+    public void DisablePool()
     {
         foreach (var pool in _pool)
         {
-            pool.GetComponent<Bullet>().Direction = Vector3.zero;
             pool.gameObject.SetActive(false);
         }
     }
