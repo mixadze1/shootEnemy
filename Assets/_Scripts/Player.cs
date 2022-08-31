@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Anim;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent (typeof(AnimationChange))]
@@ -19,10 +20,11 @@ public class Player : MonoBehaviour
     [SerializeField,Range (0.45f,1f)] private float _timeToNextShoot = 0.45f;
 
     private NavMeshAgent _agent;
-    private Game _game;
+    private GameStarter _game;
     private Bullet _bulletSave;
     private Coroutine _coroutine;
     private AnimationChange _animationChange;
+    private Camera _camera;
    
     private int _countClick;
 
@@ -31,13 +33,9 @@ public class Player : MonoBehaviour
 
     public bool IsMoving;
 
-    public const string WALKING = "Walking";
-    public const string SHOOT_IDLE = "ShootIdle";
-    public const string SHOOT = "Shoot";
-    public const string TO_IDLE = "ToIdle";
-
-    public void Initialize(Game game)
+    public void Initialize(GameStarter game, Camera camera)
     {
+        _camera = camera;
         _game = game;
         _animationChange = GetComponent<AnimationChange>();
         _agent = GetComponent<NavMeshAgent>();
@@ -56,9 +54,14 @@ public class Player : MonoBehaviour
 
         if (IsCanShoot())
         {
-            Shoot(Camera.main.ScreenPointToRay(Input.mousePosition));
+            Shoot(GetRay());
         }
         CheckDestination();
+    }
+
+    private Ray GetRay()
+    {
+        return _camera.ScreenPointToRay(Input.mousePosition);
     }
 
     private bool IsCanShoot()
@@ -79,8 +82,8 @@ public class Player : MonoBehaviour
 
     private void StartMovingPos()
     {  
-        _animationChange.Animator.SetBool(TO_IDLE, false);
-        _animationChange.ChangeAnimationState(WALKING);
+        _animationChange.Animator.SetBool(Anim.Player.TO_IDLE, false);
+        _animationChange.ChangeAnimationState(Anim.Player.WALKING);
         _agent.SetDestination(_position[_countClick].transform.position); 
     }
 
@@ -92,7 +95,7 @@ public class Player : MonoBehaviour
             {
                 if (!_agent.hasPath || _agent.velocity.sqrMagnitude == 0f)
                 {
-                    _animationChange.Animator.SetBool(TO_IDLE, true);
+                    _animationChange.Animator.SetBool(Anim.Player.TO_IDLE, true);
                     CheckFinish();
                     CheckEnemies();
                 }
@@ -125,7 +128,7 @@ public class Player : MonoBehaviour
 
     private IEnumerator PrepareShoot(Ray ray)
     {
-        _animationChange.ChangeAnimationState(SHOOT); 
+        _animationChange.ChangeAnimationState(Anim.Player.SHOOT); 
         _isShoot = true;
         
         yield return new WaitForSeconds(_prepareShoot);

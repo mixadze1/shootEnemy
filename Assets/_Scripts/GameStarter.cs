@@ -2,20 +2,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Cinemachine;
+using System;
 
-public class Game : MonoBehaviour
-{ 
+public class GameStarter : MonoBehaviour
+{
+    [SerializeField] private Camera _camera;
     [SerializeField] private Bullet _bulletPrefab;
     
     [SerializeField] private CinemachineVirtualCamera _virtualCamera;
-    [SerializeField] private List<Level> _levels;
-
-    [SerializeField] private GameObject _startPlayButton;
-    [SerializeField] private GameObject _winButton;
+    [SerializeField] private GameUI _gameUI;
 
     [SerializeField] private int _amountCreateBulletInPool;
     [SerializeField] private int _countLevel;
 
+    [SerializeField] private List<Level> _levels;
     private Player _player;
     private Level _level;
     public NavMeshSurface NavMesh;
@@ -31,7 +31,8 @@ public class Game : MonoBehaviour
 
     private void StartNewGame()
     {
-        _startPlayButton.SetActive(true);
+        _gameUI.Initialize(this);
+        _gameUI.StartPLayButton.SetActive(true);
         CreateLevel(_levels[_countLevel]);
         InitializePlayer();
         InitializeEnemy();
@@ -43,7 +44,7 @@ public class Game : MonoBehaviour
     {
         IsPlay = false;
         Bullets.DisablePool();
-        _winButton.SetActive(false);
+        _gameUI.WinButton.SetActive(false);
         Destroy(_level.gameObject);
         StartNewGame();
     }
@@ -62,7 +63,7 @@ public class Game : MonoBehaviour
     private void InitializePlayer()
     {
         Player player = _player = _level.GetComponentInChildren<Player>();
-        player.Initialize(this);
+        player.Initialize(this, _camera);
     }
 
     private void InitializeEnemy()
@@ -78,17 +79,4 @@ public class Game : MonoBehaviour
     {
         Bullets = new PoolBehaviour<Bullet>(_bulletPrefab, _amountCreateBulletInPool);
     }
-
-    #region UI
-    public void StartPlay()
-    {
-        IsPlay = true;
-        _startPlayButton.SetActive(false);
-    }
-
-    public void Win()
-    {
-        _winButton.SetActive(true);
-    }
-    #endregion
 }

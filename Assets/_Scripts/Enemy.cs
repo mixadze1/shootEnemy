@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Anim;
 
 [RequireComponent(typeof(Animator))]
 public class Enemy : MonoBehaviour
@@ -21,8 +22,6 @@ public class Enemy : MonoBehaviour
     public float Health;
 
     public bool IsDie;
-
-    public const string IS_DAMAGE = "Damage";
 
     public void Initialize(NavMeshPosition navMeshPosition)
     {
@@ -45,7 +44,7 @@ public class Enemy : MonoBehaviour
 
     public void GetDamage(float damage)
     {
-        _animator.Play(IS_DAMAGE);
+        _animator.Play(Anim.Enemy.IS_DAMAGE);
 
         Health -= damage;
         _imageHealth.fillAmount = Health / _maxHealth;

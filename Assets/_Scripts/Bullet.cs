@@ -23,9 +23,10 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.GetComponentInParent<Enemy>())
+        Enemy enemy = collision.gameObject.GetComponentInParent<Enemy>();
+        if (enemy)
         {
-            TakeDamage((collision.gameObject.GetComponentInParent<Enemy>()));
+            TakeDamage(enemy);
         }
         Direction = Vector3.zero;
         gameObject.SetActive(false);
