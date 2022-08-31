@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerShoot : MonoBehaviour
@@ -13,7 +12,7 @@ public class PlayerShoot : MonoBehaviour
     private Player _player;
     private Bullet _bulletSave;
     private Coroutine _coroutine;
-    private GameStarter _game;
+    private Game _game;
     private Camera _camera;
 
     private bool _canShoot;
@@ -22,7 +21,7 @@ public class PlayerShoot : MonoBehaviour
     public bool CanShoot { get => _canShoot; set => _canShoot = value; }
     public bool IsShoot { get => _isShoot; set => _isShoot = value; }
 
-    public void Initialize(Player player, Camera camera, GameStarter game)
+    public void Initialize(Player player, Camera camera, Game game)
     {
         _game = game;
         _player = player;

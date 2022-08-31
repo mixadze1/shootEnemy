@@ -11,9 +11,10 @@ public class Player : MonoBehaviour
     [SerializeField] private List<NavMeshPosition> _position;
 
     private NavMeshAgent _agent;
-    private GameStarter _game;
+    private Game _game;
     private AnimationChange _animationChange;
     private PlayerShoot _playerShoot;
+    private Finish _finish;
 
     private int _countClick;
 
@@ -23,8 +24,9 @@ public class Player : MonoBehaviour
 
     public AnimationChange AnimationChange => _animationChange;
 
-    public void Initialize(GameStarter game, Camera camera)
+    public void Initialize(Game game, Camera camera)
     {
+        _finish = new Finish();
         _game = game;
         GetNeedComponent();
         _playerShoot.Initialize(this,camera,_game);
@@ -41,7 +43,7 @@ public class Player : MonoBehaviour
     {
         if (IsNextPosition())
         {
-            if (_position[_countClick].IsFinish)
+            if (Position.IsFinish)
                 return;
 
             _countClick++;
@@ -50,11 +52,10 @@ public class Player : MonoBehaviour
         CheckDestination();
     }
 
-
     private bool IsNextPosition()
     {
         if (_game.IsPlay && _agent.velocity.sqrMagnitude == 0f &&
-                _position[_countClick].Enemies.Count <= 0)
+                Position.Enemies.Count <= 0)
             return true;
         return false;
     }
@@ -63,7 +64,7 @@ public class Player : MonoBehaviour
     {  
         _animationChange.Animator.SetBool(Anim.Player.TO_IDLE, false);
         _animationChange.ChangeAnimationState(Anim.Player.WALKING);
-        _agent.SetDestination(_position[_countClick].transform.position); 
+        _agent.SetDestination(Position.transform.position); 
     }
 
     private void CheckDestination()
@@ -88,13 +89,13 @@ public class Player : MonoBehaviour
 
     private void CheckEnemies()
     {
-        if (_position[_countClick]. Enemies.Count > 0)
+        if (Position.Enemies.Count > 0)
             _playerShoot.CanShoot = true;
     }
 
     private void CheckFinish()
     {
-        if (_position[_countClick].IsFinish)
-            _game.RestartGame();
+        if (Position.IsFinish)
+            _finish.EndGame(_game);
     }
 }

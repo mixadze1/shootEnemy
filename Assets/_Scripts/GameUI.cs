@@ -7,12 +7,12 @@ public class GameUI : MonoBehaviour
     [SerializeField] private GameObject _startPlayButton;
     [SerializeField] private GameObject _winButton;
 
-    private GameStarter _game;
+    private Game _game;
 
     public GameObject StartPLayButton => _startPlayButton;
     public GameObject WinButton => _winButton;
 
-    public void Initialize(GameStarter game)
+    public void Initialize(Game game)
     {
         _game = game;
     }
