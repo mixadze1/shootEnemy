@@ -4,20 +4,16 @@ using UnityEngine.UI;
 using Anim;
 
 [RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(EnemyRagdoll))]
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private Image _imageHealth;
-    [SerializeField] private TextMeshProUGUI _textHealth;
-    [SerializeField] private Canvas _canvasForHealth;
-
-    private Rigidbody[] _rigidbodyRagdoll;
+    private EnemyUI _enemyUI;
+    private EnemyRagdoll _enemyRagdoll;
 
     private NavMeshPosition _navMeshPosition;
     private Animator _animator;
 
-
-    private float _offsetAngleForCanvas = 180;
-    private float _maxHealth;
+    public float MaxHealth;
 
     public float Health;
 
@@ -26,20 +22,18 @@ public class Enemy : MonoBehaviour
     public void Initialize(NavMeshPosition navMeshPosition)
     {
         GetNeedComponent();
-        _textHealth.text = Health.ToString();
-        _maxHealth = Health;
+       
+        MaxHealth = Health;
         _navMeshPosition = navMeshPosition;
-        foreach (Rigidbody rb in _rigidbodyRagdoll)
-        {
-            rb.isKinematic = true;
-        }
-        RotationCanvas();
+        _enemyRagdoll.Initialize();
+        _enemyUI?.Initialize(this);
     }
 
     private void GetNeedComponent()
     {
+        _enemyRagdoll = GetComponent<EnemyRagdoll>();
+        _enemyUI = GetComponent<EnemyUI>();
         _animator = GetComponent<Animator>();
-        _rigidbodyRagdoll = GetComponentsInChildren<Rigidbody>();
     }
 
     public void GetDamage(float damage)
@@ -47,28 +41,18 @@ public class Enemy : MonoBehaviour
         _animator.Play(Anim.Enemy.IS_DAMAGE);
 
         Health -= damage;
-        _imageHealth.fillAmount = Health / _maxHealth;
-        _textHealth.text = Health.ToString();
-
+        _enemyUI?.ChangeHealth();
         if (Health <= 0)
         {
             Die();
         }
     }
 
-    private void RotationCanvas()
-    {
-        _canvasForHealth.transform.localRotation = Quaternion.Euler(0, (_offsetAngleForCanvas - transform.rotation.eulerAngles.y + _offsetAngleForCanvas), 0);
-    }
-
     private void Die()
     {
-        _canvasForHealth.gameObject.SetActive(false);
+        _enemyUI?.DisableUI();
         _animator.enabled = false;
-        foreach (Rigidbody rb in _rigidbodyRagdoll)
-        {
-            rb.isKinematic = false;
-        }
+        _enemyRagdoll.ActivateRagdoll();
         IsDie = true;
         _navMeshPosition.Enemies.Remove(this);
     }

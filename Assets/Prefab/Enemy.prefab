@@ -88,12 +88,12 @@ GameObject:
   - component: {fileID: 895970442627955889}
   - component: {fileID: 5806565830952085017}
   m_Layer: 7
-  m_Name: Canvas
+  m_Name: CanvasHealth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3789366802240873152
 RectTransform:
   m_ObjectHideFlags: 0
@@ -188,7 +188,7 @@ GameObject:
   - component: {fileID: 8569886500834627492}
   - component: {fileID: 5833706156103132960}
   m_Layer: 7
-  m_Name: Text (TMP)
+  m_Name: TextHealth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1398,6 +1398,8 @@ GameObject:
   - component: {fileID: 5401197427875539636}
   - component: {fileID: 5401197427875539637}
   - component: {fileID: 3800123144666044294}
+  - component: {fileID: 6464106951563952818}
+  - component: {fileID: 7011454051913109205}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
@@ -1454,11 +1456,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c11014548530e14ca761e7bd45ebc98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MaxHealth: 0
+  Health: 10
+  IsDie: 0
+--- !u!114 &6464106951563952818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5401197427875539643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c61e0924978482a4ea3b152be58caf11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _imageHealth: {fileID: 4882359765117484496}
   _textHealth: {fileID: 5833706156103132960}
   _canvasForHealth: {fileID: 5114275079356767870}
-  Health: 10
-  IsDie: 0
+--- !u!114 &7011454051913109205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5401197427875539643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db02fbd166c60b5429a6dc894fd644c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5401197427879455853
 GameObject:
   m_ObjectHideFlags: 0
@@ -3159,7 +3186,7 @@ GameObject:
   - component: {fileID: 8468611831960159662}
   - component: {fileID: 4882359765117484496}
   m_Layer: 7
-  m_Name: Health
+  m_Name: ImageHealth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
