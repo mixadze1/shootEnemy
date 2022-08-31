@@ -19,7 +19,6 @@ public class PlayerShoot : MonoBehaviour
     private bool _isShoot;
 
     public bool CanShoot { get => _canShoot; set => _canShoot = value; }
-    public bool IsShoot { get => _isShoot; set => _isShoot = value; }
 
     public void Initialize(Player player, Camera camera, Game game)
     {
